@@ -8,18 +8,13 @@ app = FastAPI()
 
 solicitudes_db = {}
 
-# Simulación de validación JWT (solo ejemplo, en producción usar librería como PyJWT)
 def validate_jwt(token: str) -> bool:
-    # Para demo, acepta cualquier token que empiece con "Bearer "
     return token and token.startswith("Bearer 123")
 
 # Mock a servicio SOAP externo (simulado)
 def call_soap_service(data):
-    # Aquí simularías una llamada real al SOAP
-    # Puede retornar éxito, en revisión o rechazo aleatoriamente
     import random
     estados = ["procesado", "en revisión", "rechazado"]
-    # Simulando latencia
     time.sleep(0.5)
     return {"estado": random.choice(estados)}
 
@@ -32,7 +27,6 @@ def crear_solicitud(
     print("Authorization recibido:", repr(authorization))
     if not authorization or not validate_jwt(authorization):
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Token inválido")
-    # Crear solicitud
     solicitud_id = str(uuid.uuid4())
     # Llamada a sistema de certificación (SOAP)
     estado_certificacion = call_soap_service({"tipo": tipo, "descripcion": descripcion})

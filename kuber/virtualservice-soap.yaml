@@ -1,0 +1,17 @@
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: soap-vs
+spec:
+  hosts:
+    - mock-soap.default.svc.cluster.local  
+  http:
+    - route:
+        - destination:
+            host: mock-soap.default.svc.cluster.local
+            port:
+              number: 80
+      retries:
+        attempts: 2     
+        perTryTimeout: 2s
+        retryOn: gateway-error,connect-failure,refused-stream,5xx
